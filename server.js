@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-
+import z from 'zod'
 dotenv.config();
 
 const app = express();
@@ -36,10 +36,17 @@ const signUpSchema = new mongoose.Schema({
 
 const SignUp = mongoose.model('SignUp', signUpSchema);
 
+const signupSchema = z.object({
+  name: z.string().min(1, 'Name is required'),
+  email: z.string().email('Invalid email'),
+  linkedin: z.string().url('Invalid LinkedIn URL'),
+});
+
 // Routes
 app.post('/api/signup', async (req, res) => {
   try {
-    const formData = req.body;
+    const formData = signupSchema.parse(req.body);
+    
     const newEntry = new SignUp(formData);
     await newEntry.save();
 
@@ -48,6 +55,12 @@ app.post('/api/signup', async (req, res) => {
     console.error('Error saving form data:', err);
     res.status(500).json({ error: 'Internal server error' });
   }
+});
+
+app.get('/', async(req, res)=>{
+  // try{
+    res.status(200).json({message:"Server is up"})
+  
 });
 
 // Start server
