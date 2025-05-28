@@ -45,8 +45,8 @@ const signupSchema = z.object({
 // Routes
 app.post('/api/signup', async (req, res) => {
   try {
-    const formData = signupSchema.parse(req.body);
-    
+    // const formData = signupSchema.parse(req.body);
+    const formData=req.body;
     const newEntry = new SignUp(formData);
     await newEntry.save();
 
