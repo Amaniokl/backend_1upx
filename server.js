@@ -39,7 +39,7 @@ const SignUp = mongoose.model('SignUp', signUpSchema);
 const signupSchema = z.object({
   name: z.string().min(1, 'Name is required'),
   email: z.string().email('Invalid email'),
-  linkedin: z.string().url('Invalid LinkedIn URL'),
+  linkedin: z.string().url('Invalid LinkedIn URL').optional,
 });
 
 // Routes
